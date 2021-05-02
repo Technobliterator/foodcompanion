@@ -3,7 +3,7 @@
 import os
 import sys
 
-
+from django.db.models import FoodProducts
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'foodcompanion.settings')
