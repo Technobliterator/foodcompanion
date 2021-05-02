@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class FoodCompanion(models.Model):
+class FoodProducts(models.Model):
     product = models.TextField(max_length = 255)
     calories = models.IntegerField()
     ingredients = models.TextField(max_length = 500)
@@ -15,20 +15,20 @@ class FoodCompanion(models.Model):
     halal = models.BooleanField()
     kosher = models.BooleanField()
 
-from models import FoodCompanion
+from models import FoodProducts
 from django.db.models import Q
 
 # 1. query all items form foodproducts where country = 'United States'
-country = FoodCompanion.objects.filter(country__iexact = 'United States')
+country = FoodProducts.objects.filter(country__iexact = 'United States')
 print(country)
 # 2. all the ones from Wholefood
-store = FoodCompanion.objects.filter(store__iexact = 'Wholefoods')
+store = FoodProducts.objects.filter(store__iexact = 'Wholefoods')
 print(store)
 # 3. all the ones with less than 300 calories
-calories = FoodCompanion.objects.filter(calories__lt < 300)
+calories = FoodProducts.objects.filter(calories__lt < 300)
 print(calories)
 # 4. all the ones listed as Vegan
-vegan = FoodCompanion.objects.filter(vagan__iexact = 'True')
+vegan = FoodProducts.objects.filter(vagan__iexact = 'True')
 print(vegan)
 # 5. all the ones Vegetarian
-vegetarian = FoodCompanion.objects.filter(Q(vagan__iexact = 'True') | Q(vegetarian__iexact = 'True'))
+vegetarian = FoodProducts.objects.filter(Q(vagan__iexact = 'True') | Q(vegetarian__iexact = 'True'))
