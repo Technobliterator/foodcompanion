@@ -2,6 +2,14 @@ from django.db import models
 
 # Create your models here.
 
+class CustomUser(AbstractUser):
+    pass
+
+    # add additional fields in here
+
+    def __str__(self):
+        return self.username
+		
 class FoodProducts(models.Model):
     product = models.TextField(max_length = 255)
     calories = models.IntegerField()
