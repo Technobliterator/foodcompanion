@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+
+{% block top %}
+
+<header class="hero-image">
+	<div class="hero-text">
+		<h1>Welcome to Food Companion!</h1>
+		<p>A vast database where you can sort by food products from the United States, Britain, and Mexico that suit your dietary requirements!</p>
+	</div>
+</header>
+
+{% endblock %}
+
+{% block content %}
+
+<h2>Browse food products</h2>
+
+<div id="tablecontainer">
+	{% include 'table.html' with products=products %}
+</div>
+
+{% endblock %}

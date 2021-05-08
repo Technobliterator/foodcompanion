@@ -1,0 +1,32 @@
+<table class="table table-striped">
+	<thead class="thead-dark">
+		<th scopes="col">Name</th>
+		<th scopes="col">Calories</th>
+		<th scopes="col">Ingredients</th>
+		<th scopes="col">Country</th>
+		<th scopes="col">Store</th>
+		<th scopes="col">Gluten free?</th>
+		<th scopes="col">Vegan?</th>
+		<th scopes="col">Vegetarian?</th>
+		<th scopes="col">Halal?</th>
+		<th scopes="col">Kosher?</th>
+	</thead>
+	<tbody>
+		{% for product in products %}
+		<tr>
+			<th scope="row">
+				<a href="{% url 'product' product.id %}">{{product.product}}</a>
+			</th>
+			<td>{{product.calories}}</td>
+			<td>{{product.ingredients}}</td>
+			<td>{{product.country}}</td>
+			<td>{{product.store}}</td>
+			<td>{{product.glutenfree}}</td>
+			<td>{{product.vegan}}</td>
+			<td>{{product.vegetarian}}</td>
+			<td>{{product.halal}}</td>
+			<td>{{product.kosher}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>

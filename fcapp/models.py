@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
@@ -9,12 +10,12 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
-		
+
 class FoodProducts(models.Model):
     product = models.TextField(max_length = 255)
     calories = models.IntegerField()
     ingredients = models.TextField(max_length = 500)
-    allergens = models.TextField(max_length = 500)
+    #allergens = models.TextField(max_length = 500)
     country = models.CharField(max_length = 50)
     store = models.CharField(max_length = 50)
     glutenfree = models.BooleanField()
@@ -23,7 +24,10 @@ class FoodProducts(models.Model):
     halal = models.BooleanField()
     kosher = models.BooleanField()
 
-from models import FoodProducts
+    def __str__(self):
+        return self.product
+
+'''
 from django.db.models import Q
 
 # 1. query all items form foodproducts where country = 'United States'
@@ -40,3 +44,4 @@ vegan = FoodProducts.objects.filter(vagan__iexact = 'True')
 print(vegan)
 # 5. all the ones Vegetarian
 vegetarian = FoodProducts.objects.filter(Q(vagan__iexact = 'True') | Q(vegetarian__iexact = 'True'))
+'''
