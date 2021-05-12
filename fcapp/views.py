@@ -45,13 +45,17 @@ def register(response):
 	return render(response, 'registration/register.html', {'form': form})
 
 def savesettings(response):
+    message = 'User not updated; form invalid'
     if response.method == 'POST' and response.user.is_authenticated:
-        u_form = CustomUserChangeForm(response.POST,instance=response.user)
-        if u_form.is_valid():
-	        u_form.save()
-        return ''
+
+        #data = json.loads(response.body)
+        form = CustomUserChangeForm(data=response.POST,instance=response.user)
+        if form.is_valid():
+            form.save()
+            message = 'Valid form; updated user'
+        return HttpResponse({"message":message}, content_type="application/json", status=201)
     else:
-        return redirect('index')
+        return HttpResponse({"message":message}, content_type="application/json", status=400)
 
 '''
 def product(response, id):

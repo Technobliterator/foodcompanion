@@ -32,13 +32,14 @@
 		data: {
 			baseURL: baseURL,
 			products: {},
+			loading: true,
 			product: '',
 			ingredients: '',
 			calories: '',
 			country: '',
-			countries: ['United States', 'United Kingdom', 'Mexico'],
+			countries: ['United States', 'United Kingdom', 'Canada'],
 			store: '',
-			stores: ['Wholefoods', 'Sam\'s Club', 'Tesco', 'H-E-B'],
+			stores: ['Whole Foods Martket', 'Kroger', 'Tesco', 'Walmart'],
 			glutenfree: false,
 			vegan: false,
 			vegetarian: false,
@@ -47,6 +48,7 @@
 		},
 		methods: {
 			pullData: function() {
+				this.loading = true;
 				let dataURL = this.baseURL;
 
 				if(this.product!='') {
@@ -84,6 +86,7 @@
 					.then(res => res.json())
 					.then((out) => {
 						this.products = out;
+						this.loading = false;
 					})
 					.catch(err => { throw err }
 				);
@@ -99,6 +102,9 @@
 			updateVegan: function() {
 				if(!this.vegan) {
 					this.vegan = true;
+					this.vegetarian = false;
+					this.halal = false;
+					this.kosher = false;
 				} else {
 					this.vegan = false;
 				}
@@ -107,6 +113,9 @@
 			updateVegetarian: function() {
 				if(!this.vegetarian) {
 					this.vegetarian = true;
+					this.vegan = false;
+					this.halal = false;
+					this.kosher = false;
 				} else {
 					this.vegetarian = false;
 				}
@@ -115,6 +124,9 @@
 			updateHalal: function() {
 				if(!this.halal) {
 					this.halal = true;
+					this.vegan = false;
+					this.vegetarian = false;
+					this.kosher = false;
 				} else {
 					this.halal = false;
 				}
@@ -123,13 +135,15 @@
 			updateKosher: function() {
 				if(!this.kosher) {
 					this.kosher = true;
+					this.vegan = false;
+					this.vegetarian = false;
+					this.halal = false;
 				} else {
 					this.kosher = false;
 				}
 				this.pullData();
 			},
 			saveSettings: function() {
-				//
 				axios({
 					method:'post',
 					url: window.location.href + 'save-settings/',
@@ -146,6 +160,9 @@
 				}).then();
 			},
 			clearFilters: function() {
+				this.product = '';
+				this.ingredients = '';
+				this.calories = '';
 				this.country = '';
 				this.store = '';
 				this.glutenfree = false;

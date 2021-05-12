@@ -64,7 +64,10 @@
 		<th scopes="col">Certificates</th>
 	</thead>
 	<tbody>
-		<tr v-for="product in products">
+		<tr v-if="loading == true">
+			<td colspan="5">Loading...</td>
+		</tr>
+		<tr v-if="loading == false" v-for="product in products">
 			<th scope="row">
 				<a href="#">[[product.product]]</a>
 				{% comment %}<a href="{% url 'product' product.id %}">{{product.product}}</a>{% endcomment%}
