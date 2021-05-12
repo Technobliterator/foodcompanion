@@ -7,9 +7,17 @@ class CustomUser(AbstractUser):
     pass
 
     # add additional fields in here
+    country = models.CharField(max_length = 50, default=None, blank=True, null=True)
+    store = models.CharField(max_length = 50, default=None, blank=True, null=True)
+    glutenfree = models.BooleanField(default=None, blank=True, null=True)
+    vegan = models.BooleanField(default=None, blank=True, null=True)
+    vegetarian = models.BooleanField(default=None, blank=True, null=True)
+    halal = models.BooleanField(default=None, blank=True, null=True)
+    kosher = models.BooleanField(default=None, blank=True, null=True)
 
     def __str__(self):
         return self.username
+
 
 class FoodProducts(models.Model):
     product = models.TextField(max_length = 255)
@@ -26,22 +34,3 @@ class FoodProducts(models.Model):
 
     def __str__(self):
         return self.product
-
-'''
-from django.db.models import Q
-
-# 1. query all items form foodproducts where country = 'United States'
-country = FoodProducts.objects.filter(country__iexact = 'United States')
-print(country)
-# 2. all the ones from Wholefood
-store = FoodProducts.objects.filter(store__iexact = 'Wholefoods')
-print(store)
-# 3. all the ones with less than 300 calories
-calories = FoodProducts.objects.filter(calories__lt < 300)
-print(calories)
-# 4. all the ones listed as Vegan
-vegan = FoodProducts.objects.filter(vagan__iexact = 'True')
-print(vegan)
-# 5. all the ones Vegetarian
-vegetarian = FoodProducts.objects.filter(Q(vagan__iexact = 'True') | Q(vegetarian__iexact = 'True'))
-'''

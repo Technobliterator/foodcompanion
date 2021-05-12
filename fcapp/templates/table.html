@@ -1,32 +1,84 @@
-<table class="table table-striped">
+{% load static %}
+
+<p>Type in the search bar and press "Enter" to query a result, or use one of the filters to find a product.</p>
+
+<form>
+	<div class="form-row">
+		<div class="col-md-6">
+			<label for="product">Product</label>
+			<input v-model="product" class="form-control" id="product" placeholder="Search by product name" v-on:keyup.enter="pullData">
+		</div>
+		<div class="col-md-6">
+			<label for="ingredients">Ingredients</label>
+			<input v-model="ingredients" class="form-control" id="ingredients" placeholder="Search by ingredients" v-on:keyup.enter="pullData">
+		</div>
+	</div>
+
+	<div class="form-row">
+		<div class="col-md-4 mb-3">
+			<label for="calroies">Maximum calories</label>
+			<input v-model="calories" class="form-control" id="calories" placeholder="Search by max. calories" v-on:keyup.enter="pullData">
+		</div>
+		<div class="col-md-4 mb-3">
+			<label for="country">Search by country</label>
+			<select name="country" class="form-control btn btn-dark" v-model="country" v-on:change="pullData">
+				<option value="">Any country</option>
+				<option v-for="country in countries" v-bind:value="country">
+					[[country]]
+				</option>
+			</select>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label for="store">Search by store</label>
+			<select name="store" class="form-control btn btn-dark" v-model="store" v-on:change="pullData">
+				<option value="">Any store</option>
+				<option v-for="store in stores" v-bind:value="store">
+					[[store]]
+				</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="form-row">
+		<div class="col-md-8">
+			<label>Browse by certificates:</label>
+			<button type="button" class="btn" :class="{'btn-dark': glutenfree === false, 'btn-danger': glutenfree === true}" v-on:click="updateGlutenfree">Gluten-free?</button>
+			<button type="button" class="btn" :class="{'btn-dark': vegan === false, 'btn-danger': vegan === true}" v-on:click="updateVegan">Vegan</button>
+			<button type="button" class="btn" :class="{'btn-dark': vegetarian === false, 'btn-danger': vegetarian === true}" v-on:click="updateVegetarian">Vegetarian</button>
+			<button type="button" class="btn" :class="{'btn-dark': halal === false, 'btn-danger': halal === true}" v-on:click="updateHalal">Halal</button>
+			<button type="button" class="btn" :class="{'btn-dark': kosher === false, 'btn-danger': kosher === true}" v-on:click="updateKosher">Kosher</button>
+		</div>
+		<div class="col-md-4">
+			<div class="btn btn-dark" v-on:click="saveSettings">Save settings</div>
+			<div class="btn btn-danger" v-on:click="clearFilters">Clear filters</div>
+		</div>
+	</div>
+</form>
+
+<table id="table" class="table table-striped">
 	<thead class="thead-dark">
 		<th scopes="col">Name</th>
 		<th scopes="col">Calories</th>
 		<th scopes="col">Ingredients</th>
-		<th scopes="col">Country</th>
 		<th scopes="col">Store</th>
-		<th scopes="col">Gluten free?</th>
-		<th scopes="col">Vegan?</th>
-		<th scopes="col">Vegetarian?</th>
-		<th scopes="col">Halal?</th>
-		<th scopes="col">Kosher?</th>
+		<th scopes="col">Certificates</th>
 	</thead>
 	<tbody>
-		{% for product in products %}
-		<tr>
+		<tr v-for="product in products">
 			<th scope="row">
-				<a href="{% url 'product' product.id %}">{{product.product}}</a>
+				<a href="#">[[product.product]]</a>
+				{% comment %}<a href="{% url 'product' product.id %}">{{product.product}}</a>{% endcomment%}
 			</th>
-			<td>{{product.calories}}</td>
-			<td>{{product.ingredients}}</td>
-			<td>{{product.country}}</td>
-			<td>{{product.store}}</td>
-			<td>{{product.glutenfree}}</td>
-			<td>{{product.vegan}}</td>
-			<td>{{product.vegetarian}}</td>
-			<td>{{product.halal}}</td>
-			<td>{{product.kosher}}</td>
+			<td>[[product.calories]]</td>
+			<td>[[product.ingredients]]</td>
+			<td>[[product.store]]<br>([[product.country]])</td>
+			<td>
+				<img v-if="product.glutenfree" class="ceritificate-icon" src="{% static 'images/glutenfree.png' %}" alt="Certified gluten-free" title="Certified gluten-free">
+				<img v-if="product.vegan" class="ceritificate-icon" src="{% static 'images/vegan.png' %}" alt="Certified vegan" title="Certified vegan">
+				<img v-if="product.vegetarian" class="ceritificate-icon" src="{% static 'images/vegetarian.png' %}" alt="Certified vegetarian" title="Certified vegetarian">
+				<img v-if="product.halal" class="ceritificate-icon" src="{% static 'images/halal.png' %}" alt="Certified halal" title="Certified halal">
+				<img v-if="product.kosher" class="ceritificate-icon" src="{% static 'images/kosher.png' %}" alt="Certified kosher" title="Certified kosher">
+			</td>
 		</tr>
-		{% endfor %}
 	</tbody>
 </table>

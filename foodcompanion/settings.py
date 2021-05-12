@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'fcapp',
 ]
 
@@ -117,3 +118,5 @@ STATICFILES_DIRS = [
 ]
 
 AUTH_USER_MODEL = 'fcapp.CustomUser'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 
-
 {% block top %}
 
 <header class="hero-image">
@@ -17,7 +16,155 @@
 <h2>Browse food products</h2>
 
 <div id="tablecontainer">
-	{% include 'table.html' with products=products %}
+	{% include 'table.html' %}
 </div>
 
+{% endblock %}
+
+{% block vuescript %}
+<script>
+	//import axios from 'axios'
+	let baseURL = window.location.href + 'table?';
+
+	var app = new Vue({
+		el: '#tablecontainer',
+		delimiters: ['[[', ']]'],
+		data: {
+			baseURL: baseURL,
+			products: {},
+			product: '',
+			ingredients: '',
+			calories: '',
+			country: '',
+			countries: ['United States', 'United Kingdom', 'Mexico'],
+			store: '',
+			stores: ['Wholefoods', 'Sam\'s Club', 'Tesco', 'H-E-B'],
+			glutenfree: false,
+			vegan: false,
+			vegetarian: false,
+			halal: false,
+			kosher: false,
+		},
+		methods: {
+			pullData: function() {
+				let dataURL = this.baseURL;
+
+				if(this.product!='') {
+					dataURL += 'product=' + this.product + '&';
+				}
+				if(this.ingredients!='') {
+					dataURL += 'ingredients=' + this.ingredients + '&';
+				}
+				if(this.calories!='') {
+					dataURL += 'calories__lt=' + this.calories + '&';
+				}
+				if(this.country!='') {
+					dataURL += 'country=' + this.country + '&';
+				}
+				if(this.store!='') {
+					dataURL += 'store=' + this.store + '&';
+				}
+				if(this.glutenfree) {
+					dataURL += 'glutenfree=true&';
+				}
+				if(this.vegan) {
+					dataURL += 'vegan=true&';
+				}
+				if(this.vegetarian) {
+					dataURL += 'vegetarian=true&';
+				}
+				if(this.halal) {
+					dataURL += 'halal=true&';
+				}
+				if(this.kosher) {
+					dataURL += 'kosher=true&';
+				}
+
+				fetch(dataURL)
+					.then(res => res.json())
+					.then((out) => {
+						this.products = out;
+					})
+					.catch(err => { throw err }
+				);
+			},
+			updateGlutenfree: function() {
+				if(!this.glutenfree) {
+					this.glutenfree = true;
+				} else {
+					this.glutenfree = false;
+				}
+				this.pullData();
+			},
+			updateVegan: function() {
+				if(!this.vegan) {
+					this.vegan = true;
+				} else {
+					this.vegan = false;
+				}
+				this.pullData();
+			},
+			updateVegetarian: function() {
+				if(!this.vegetarian) {
+					this.vegetarian = true;
+				} else {
+					this.vegetarian = false;
+				}
+				this.pullData();
+			},
+			updateHalal: function() {
+				if(!this.halal) {
+					this.halal = true;
+				} else {
+					this.halal = false;
+				}
+				this.pullData();
+			},
+			updateKosher: function() {
+				if(!this.kosher) {
+					this.kosher = true;
+				} else {
+					this.kosher = false;
+				}
+				this.pullData();
+			},
+			saveSettings: function() {
+				//
+				axios({
+					method:'post',
+					url: window.location.href + 'save-settings/',
+	                headers: {'X-CSRFTOKEN': '{{ csrf_token }}', 'Content-Type': 'application/json'},
+					data: {
+						country: this.country,
+						store: this.store,
+						glutenfree: this.glutenfree,
+						vegan: this.vegan,
+						vegetarian: this.vegetarian,
+						halal: this.halal,
+						kosher: this.kosher,
+					}
+				}).then();
+			},
+			clearFilters: function() {
+				this.country = '';
+				this.store = '';
+				this.glutenfree = false;
+				this.vegan = false;
+				this.vegetarian = false;
+				this.halal = false;
+				this.kosher = false;
+				this.pullData();
+			},
+		},
+		mounted() {
+			fetch(this.baseURL)
+				.then(res => res.json())
+				.then((out) => {
+					this.products = out;
+				})
+				.catch(err => { throw err }
+			);
+		}
+	})
+</script>
 {% endblock %}
