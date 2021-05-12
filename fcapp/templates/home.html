@@ -5,7 +5,7 @@
 <header class="hero-image">
 	<div class="hero-text">
 		<h1>Welcome to Food Companion!</h1>
-		<p>A vast database where you can sort by food products from the United States, Britain, and Mexico that suit your dietary requirements!</p>
+		<p>A vast database where you can sort by food products from the United States, Britain, and Canada that suit your dietary requirements!</p>
 	</div>
 </header>
 
@@ -25,6 +25,7 @@
 <script>
 	//import axios from 'axios'
 	let baseURL = window.location.href + 'table?';
+	baseURL = baseURL.replace('#', '');
 
 	var app = new Vue({
 		el: '#tablecontainer',
@@ -38,7 +39,7 @@
 			currentpage: 1,
 			pages: [],
 			countries: ['United States', 'United Kingdom', 'Canada'],
-			stores: ['Whole Foods Martket', 'Kroger', 'Tesco', 'Walmart'],
+			stores: ['Whole Foods Martket', 'Kroger', 'Tesco', 'Walmart'],			
 
 			product: '',
 			ingredients: '',
@@ -113,7 +114,7 @@
 						this.stores = ['Walmart'];
 						break;
 				}
-
+				this.pullData();
 			},
 			updateGlutenfree: function() {
 				this.currentpage = 1;
@@ -173,6 +174,8 @@
 				this.pullData();
 			},
 			saveSettings: function() {
+				console.log('Disabled feature')
+				/*
 				axios({
 					method:'post',
 					url: window.location.href + 'save-settings/',
@@ -187,6 +190,7 @@
 						kosher: this.kosher,
 					}
 				}).then();
+				*/
 			},
 			clearFilters: function() {
 				this.currentpage = 1;

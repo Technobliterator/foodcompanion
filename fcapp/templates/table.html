@@ -1,6 +1,6 @@
 {% load static %}
 
-<p>Type in the relevant search bar and press "Enter" to query a result, or use one of the filters to find a product.</p>
+<p>Type in the relevant search bar and press "Enter" to query a result, or use one of the filters to find a product. You can also search by "sugar free".</p>
 
 <form>
 	<div class="form-row">
@@ -69,7 +69,10 @@
 		</tr>
 		<tr v-if="loading == false" v-for="product in products">
 			<th scope="row">
-				<a href="#">[[product.product]]</a>
+				<a v-if="product.store === 'Whole Foods Martket'" :href="'https://www.wholefoodsmarket.com/search?text=' + product.product">[[product.product]]</a>
+				<a v-if="product.store === 'Kroger'" :href="'https://www.kroger.com/search?query=' + product.product + '&searchType=default_search&fulfillment=all'">[[product.product]]</a>
+				<a v-if="product.store === 'Tesco'" :href="'https://www.tesco.com/groceries/en-GB/search?query=' + product.product">[[product.product]]</a>
+				<a v-if="product.store === 'Walmart'" :href="'https://www.walmart.ca/search?q=' + product.product">[[product.product]]</a>
 				{% comment %}<a href="{% url 'product' product.id %}">{{product.product}}</a>{% endcomment%}
 			</th>
 			<td>[[product.calories]]</td>

@@ -41,7 +41,6 @@ def table(response):
 		'total_products': totalproducts,
 		'products': list(paginated_data)
 	}
-    #json_products = { 'total_products': totalproducts, 'data': list(paginated_data) }
 
     return HttpResponse(json.dumps(json_products), content_type="application/json")
 
