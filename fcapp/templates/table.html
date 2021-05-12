@@ -1,11 +1,11 @@
 {% load static %}
 
-<p>Type in the search bar and press "Enter" to query a result, or use one of the filters to find a product.</p>
+<p>Type in the relevant search bar and press "Enter" to query a result, or use one of the filters to find a product.</p>
 
 <form>
 	<div class="form-row">
 		<div class="col-md-6">
-			<label for="product">Product</label>
+			<label for="product">Product name</label>
 			<input v-model="product" class="form-control" id="product" placeholder="Search by product name" v-on:keyup.enter="pullData">
 		</div>
 		<div class="col-md-6">
@@ -21,7 +21,7 @@
 		</div>
 		<div class="col-md-4 mb-3">
 			<label for="country">Search by country</label>
-			<select name="country" class="form-control btn btn-dark" v-model="country" v-on:change="pullData">
+			<select name="country" class="form-control btn btn-dark" v-model="country" v-on:change="updateCountry">
 				<option value="">Any country</option>
 				<option v-for="country in countries" v-bind:value="country">
 					[[country]]
@@ -85,3 +85,8 @@
 		</tr>
 	</tbody>
 </table>
+<p>
+	Page: [[currentpage]]
+	<button class="btn btn-dark" v-on:click="prevPage">Previous</button> 
+	<button class="btn btn-dark" v-on:click="nextPage">Next</button>
+</p>

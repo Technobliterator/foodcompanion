@@ -120,3 +120,6 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'fcapp.CustomUser'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+import django_heroku
+django_heroku.settings(locals())

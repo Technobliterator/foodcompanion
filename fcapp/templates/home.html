@@ -32,14 +32,19 @@
 		data: {
 			baseURL: baseURL,
 			products: {},
+			total_products: 0,
 			loading: true,
+			perpage: 50,
+			currentpage: 1,
+			pages: [],
+			countries: ['United States', 'United Kingdom', 'Canada'],
+			stores: ['Whole Foods Martket', 'Kroger', 'Tesco', 'Walmart'],
+
 			product: '',
 			ingredients: '',
 			calories: '',
 			country: '',
-			countries: ['United States', 'United Kingdom', 'Canada'],
 			store: '',
-			stores: ['Whole Foods Martket', 'Kroger', 'Tesco', 'Walmart'],
 			glutenfree: false,
 			vegan: false,
 			vegetarian: false,
@@ -49,7 +54,7 @@
 		methods: {
 			pullData: function() {
 				this.loading = true;
-				let dataURL = this.baseURL;
+				let dataURL = this.baseURL + 'page=' + this.currentpage + '&';
 
 				if(this.product!='') {
 					dataURL += 'product=' + this.product + '&';
@@ -85,13 +90,33 @@
 				fetch(dataURL)
 					.then(res => res.json())
 					.then((out) => {
-						this.products = out;
+						this.products = out['products'];
+						this.total_products = out['total_products'];
 						this.loading = false;
 					})
 					.catch(err => { throw err }
 				);
 			},
+			updateCountry: function() {
+				this.currentpage = 1;
+				switch(this.country) {
+					case '':
+						this.stores = ['Whole Foods Martket', 'Kroger', 'Tesco', 'Walmart'];
+						break;
+					case 'United States':
+						this.stores = ['Whole Foods Martket', 'Kroger'];
+						break;
+					case 'United Kingdom':
+						this.stores = ['Tesco'];
+						break;
+					case 'Canada':
+						this.stores = ['Walmart'];
+						break;
+				}
+
+			},
 			updateGlutenfree: function() {
+				this.currentpage = 1;
 				if(!this.glutenfree) {
 					this.glutenfree = true;
 				} else {
@@ -100,6 +125,7 @@
 				this.pullData();
 			},
 			updateVegan: function() {
+				this.currentpage = 1;
 				if(!this.vegan) {
 					this.vegan = true;
 					this.vegetarian = false;
@@ -111,6 +137,7 @@
 				this.pullData();
 			},
 			updateVegetarian: function() {
+				this.currentpage = 1;
 				if(!this.vegetarian) {
 					this.vegetarian = true;
 					this.vegan = false;
@@ -122,6 +149,7 @@
 				this.pullData();
 			},
 			updateHalal: function() {
+				this.currentpage = 1;
 				if(!this.halal) {
 					this.halal = true;
 					this.vegan = false;
@@ -133,6 +161,7 @@
 				this.pullData();
 			},
 			updateKosher: function() {
+				this.currentpage = 1;
 				if(!this.kosher) {
 					this.kosher = true;
 					this.vegan = false;
@@ -160,10 +189,13 @@
 				}).then();
 			},
 			clearFilters: function() {
+				this.currentpage = 1;
+
 				this.product = '';
 				this.ingredients = '';
 				this.calories = '';
 				this.country = '';
+				this.stores = ['Whole Foods Martket', 'Kroger', 'Tesco', 'Walmart'];
 				this.store = '';
 				this.glutenfree = false;
 				this.vegan = false;
@@ -172,12 +204,23 @@
 				this.kosher = false;
 				this.pullData();
 			},
+			nextPage:function() {
+				//if((this.currentpage*50) < this.totalproducts) this.currentpage++;
+				this.currentpage++;
+				this.pullData();
+			},
+			prevPage:function() {
+				if(this.currentpage > 1) this.currentpage--;
+				this.pullData();
+			}
 		},
 		mounted() {
-			fetch(this.baseURL)
+			fetch(this.baseURL + 'page=1')
 				.then(res => res.json())
 				.then((out) => {
-					this.products = out;
+					this.products = out['products'];
+					this.total_products = out['total_products'];
+					this.loading = false;
 				})
 				.catch(err => { throw err }
 			);

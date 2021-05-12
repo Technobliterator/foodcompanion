@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate
 #from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from django.core import serializers
+from django.core.paginator import Paginator
 from .models import FoodProducts
 from .filters import FoodProductsFilter
 from .forms import CustomUserChangeForm, RegisterForm
@@ -21,17 +22,28 @@ def index(response):
 	return render(response, 'home.html')
 
 def table(response):
-	products = FoodProducts.objects.order_by('product')
+    products = FoodProducts.objects.order_by('product')
 	
-	filter = FoodProductsFilter(response.GET, queryset=products)
+    filter = FoodProductsFilter(response.GET, queryset=products)	
+    filtered_data = serializers.serialize('python', filter.qs)
+    processed_filtered_data = [d['fields'] for d in filtered_data]
+    totalproducts = len(processed_filtered_data)
 
-	#vegetarian = FoodCompanion.objects.filter(Q(vagan__iexact = 'True') | Q(vegetarian__iexact = 'True'))
+    page = response.GET.get('page')
+    paginator = Paginator(processed_filtered_data, 50)
+    paginated_data = paginator.page(page)
 
-	raw_data = serializers.serialize('python', filter.qs)
-	actual_data = [d['fields'] for d in raw_data]
-	json_products = json.dumps(actual_data)
+    #raw_data = serializers.serialize('python', filter.qs)
+    #actual_data = [d['fields'] for d in raw_data]
+    #raw_data = serializers.serialize('python', paginated_data)
+    
+    json_products = {
+		'total_products': totalproducts,
+		'products': list(paginated_data)
+	}
+    #json_products = { 'total_products': totalproducts, 'data': list(paginated_data) }
 
-	return HttpResponse(json_products, content_type="application/json")
+    return HttpResponse(json.dumps(json_products), content_type="application/json")
 
 def register(response):
 	if response.method == 'POST':
